@@ -37,6 +37,48 @@
 
     <!-- Template Javascript -->
     <script src="<?php echo base_url(); ?>/assets/js/main.js"></script>
+
+    <?php if ($this->session->flashdata("confirmacion")): ?>
+  <script type="text/javascript">
+    iziToast.success({
+         title: 'CONFIRMACIÓN',
+         message: '<?php echo $this->session->flashdata("confirmacion"); ?>',
+         position: 'topRight',
+       });
+  </script>
+<?php endif; ?>
+
+<?php if ($this->session->flashdata("error")): ?>
+  <script type="text/javascript">
+    iziToast.danger({
+         title: 'ADVERTENCIA',
+         message: '<?php echo $this->session->flashdata("error"); ?>',
+         position: 'topRight',
+       });
+  </script>
+<?php endif; ?>
+
+
+<?php if ($this->session->flashdata("bienvenida")): ?>
+  <script type="text/javascript">
+    iziToast.info({
+         title: 'CONFIRMACIÓN',
+         message: '<?php echo $this->session->flashdata("bienvenida"); ?>',
+         position: 'topRight',
+       });
+  </script>
+<?php endif; ?>
+
+
+<style media="screen">
+    .error{
+      color:red;
+      font-size: 16px;
+    }
+    input.error, select.error{
+      border: 2px solid red;
+    }
+</style>
 </body>
 
 </html>
