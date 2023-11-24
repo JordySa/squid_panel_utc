@@ -21,7 +21,6 @@ class Welcome extends CI_Controller {
         }
     }
 
-
     public function index() {
         // Obtener el estado actual de Squid
         $data['squid_status'] = $this->Squid_model->getSquidStatus();
@@ -31,34 +30,45 @@ class Welcome extends CI_Controller {
     }
 
     public function startSquid() {
-        try {
-            // Iniciar Squid
-            $result = $this->Squid_model->startSquid();
+        $this->operateSquid('startSquid', 'Squid iniciado con éxito.', 'Error al iniciar Squid.');
+    }
 
-            if ($result) {
-                $this->session->set_flashdata('success', 'Squid iniciado con éxito.');
+    public function stopSquid() {
+        $this->operateSquid('stopSquid', 'Squid detenido con éxito.', 'Error al detener Squid.');
+    }
+
+    public function restartSquid() {
+        try {
+            // Detener Squid
+            $stopResult = $this->Squid_model->stopSquid();
+
+            // Iniciar Squid después de detenerlo
+            $startResult = $this->Squid_model->startSquid();
+
+            if ($stopResult && $startResult) {
+                $this->session->set_flashdata('success', 'Squid reiniciado con éxito.');
             } else {
-                $this->session->set_flashdata('error', 'Error al iniciar Squid.');
+                $this->session->set_flashdata('error', 'Error al reiniciar Squid.');
             }
         } catch (Exception $e) {
-            $this->session->set_flashdata('error', 'Error interno al iniciar Squid.');
+            $this->session->set_flashdata('error', 'Error interno al reiniciar Squid.');
         }
 
         redirect('welcome/index');
     }
 
-    public function stopSquid() {
+    private function operateSquid($method, $successMessage, $errorMessage) {
         try {
-            // Detener Squid
-            $result = $this->Squid_model->stopSquid();
+            // Ejecutar la operación en Squid
+            $result = $this->Squid_model->$method();
 
             if ($result) {
-                $this->session->set_flashdata('success', 'Squid detenido con éxito.');
+                $this->session->set_flashdata('success', $successMessage);
             } else {
-                $this->session->set_flashdata('error', 'Error al detener Squid.');
+                $this->session->set_flashdata('error', $errorMessage);
             }
         } catch (Exception $e) {
-            $this->session->set_flashdata('error', 'Error interno al detener Squid.');
+            $this->session->set_flashdata('error', 'Error interno al operar con Squid.');
         }
 
         redirect('welcome/index');

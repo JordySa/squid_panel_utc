@@ -1,5 +1,5 @@
 <?php
-class Usuarios extends CI_Controller
+class Pages extends CI_Controller
 {
     public function __construct()
     {
@@ -23,7 +23,7 @@ class Usuarios extends CI_Controller
 
     public function index()
     {
-      $data["listadoUsuarios"] = $this->usuario->obtenerTodos();
+      $data["listadoPagin"] = $this->usuario->obtenerTodos();
      
         $this->load->view("header");
         $this->load->view("usuarios/index",$data);
@@ -57,7 +57,7 @@ class Usuarios extends CI_Controller
             }
         }
     }
-    
+
     private function configurarReglasValidacion()
     {
         $this->form_validation->set_rules('username_user', 'Username', 'required');
@@ -66,39 +66,5 @@ class Usuarios extends CI_Controller
         // Agrega otras reglas de validación según tus necesidades
     }
 
-    
     // Otras funciones del controlador...
-
-      //Eliminacion a traves de AJAX
-      public function eliminarUsuario(){
-        $id_user=$this->input->post("id_user");
-        if($this->usuario->eliminar($id_user)){
-          echo json_encode(array("respuesta"=>"ok"));
-        }else{
-          echo json_encode(array("respuesta"=>"error"));
-        }
-    }
-
-    public function editar($id_user){
-      $data["usuario"]=$this->usuario->obtenerPorId($id_user);
-      $this->load->view("usuarios/editar",$data);
-    }
-
-    public function actualizarUsuarioAjax(){
-        $id_user=$this->input->post("id_user");
-        $data=array(
-            "username_user" => $this->input->post("username_user"),
-            "password_user" => $this->input->post("password_user"),
-            "email_user" => $this->input->post("email_user"),
-            "first_name_user" => $this->input->post("first_name_user"),
-            "last_name_user" => $this->input->post("last_name_user"),
-            "role_user" => $this->input->post("role_user"),
-            "is_approved_user" => $this->input->post("is_approved_user")
-        );
-        if($this->usuario->actualizar($data,$id_user)){
-            echo json_encode(array("respuesta"=>"ok"));
-        }else{
-            echo json_encode(array("respuesta"=>"error"));
-        }
-    }
 }

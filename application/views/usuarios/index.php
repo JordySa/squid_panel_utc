@@ -95,7 +95,7 @@
 
                       instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
                       window.location.href=
-                      "<?php echo site_url(); ?>/clientes/procesarEliminacion/"+id_user;
+                      "<?php echo site_url(); ?>/usuarios/procesarEliminacion/"+id_user;
 
                   }, true],
                   ['<button>NO</button>', function (instance, toast) {
