@@ -81,7 +81,9 @@ class Usuarios extends CI_Controller
 
     public function editar($id_user){
       $data["usuario"]=$this->usuario->obtenerPorId($id_user);
+      $this->load->view("header");
       $this->load->view("usuarios/editar",$data);
+      $this->load->view("footer");
     }
 
     public function actualizarUsuarioAjax(){
@@ -97,6 +99,7 @@ class Usuarios extends CI_Controller
         );
         if($this->usuario->actualizar($data,$id_user)){
             echo json_encode(array("respuesta"=>"ok"));
+            redirect("/usuarios/index");
         }else{
             echo json_encode(array("respuesta"=>"error"));
         }

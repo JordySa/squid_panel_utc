@@ -60,13 +60,11 @@
                           <i class="fa fa-pen"></i>
                         </a>
 
-                        <?php if ($this->session->userdata("c0nectadoUTC")->role_user=="admin"): ?>
                           <a href="javascript:void(0)"
                            onclick="confirmarEliminacion('<?php echo $filaTemporal->id_user; ?>');"
                            class="btn btn-danger">
                             <i class="fa fa-trash"></i>
                           </a>
-                        <?php endif; ?>
                     </td>
                   </tr>
             <?php endforeach; ?>
@@ -79,33 +77,49 @@
     </div>
 <?php endif; ?>
 <script type="text/javascript">
-    function eliminarUsuario(id_user){
-          iziToast.question({
-              timeout: 20000,
-              close: false,
-              overlay: true,
-              displayMode: 'once',
-              id: 'question',
-              zindex: 999,
-              title: 'CONFIRMACIÓN',
-              message: '¿Esta seguro de eliminar el cliente de forma pernante?',
-              position: 'center',
-              buttons: [
-                  ['<button><b>SI</b></button>', function (instance, toast) {
+  function eliminarUsuario(id_usu){
 
-                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-                      window.location.href=
-                      "<?php echo site_url(); ?>/usuarios/procesarEliminacion/"+id_user;
+    iziToast.question({
+    timeout: 20000,
+    close: false,
+    overlay: true,
+    displayMode: 'once',
+    id: 'question',
+    zindex: 999,
+    title: 'Hey',
+    message: 'Are you sure about that?',
+    position: 'center',
+    buttons: [
+                ['<button><b>YES</b></button>', function (instance, toast) {
 
-                  }, true],
-                  ['<button>NO</button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    $.ajax({
+                        url:"<?php echo site_url('usuarios/eliminarUsuario'); ?>",
+                        type:"post",
+                        data:{"id_usu":id_usu},
+                        success:function(data){
+                          cargarListadoUsuarios();
+                          alert(data);
+                        }
+                    });
 
-                      instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                }, true],
+                ['<button>NO</button>', function (instance, toast) {
 
-                  }],
-              ]
-          });
-    }
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+
+                }],
+            ],
+            onClosing: function(instance, toast, closedBy){
+                console.info('Closing | closedBy: ' + closedBy);
+            },
+            onClosed: function(instance, toast, closedBy){
+                console.info('Closed | closedBy: ' + closedBy);
+            }
+        });
+
+
+  }
 </script>
 
 <script type="text/javascript">
